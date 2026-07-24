@@ -1,0 +1,58 @@
+<div class="container">
+  <h1>Kubernetes Dashboard</h1>
+
+  <section>
+    <h2>Pods</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Namespace</th>
+          <th>Logs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pod of pods">
+          <td>{{ pod.name }}</td>
+          <td [class.running]="pod.status === 'Running'"
+              [class.pending]="pod.status === 'Pending'"
+              [class.error]="pod.status === 'Failed'">
+            {{ pod.status }}
+          </td>
+          <td>{{ pod.namespace }}</td>
+          <td><button (click)="viewLogs(pod.name)">View Logs</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Deployments</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Namespace</th>
+          <th>Replicas</th>
+          <th>Ready</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dep of deployments">
+          <td>{{ dep.name }}</td>
+          <td>{{ dep.namespace }}</td>
+          <td>{{ dep.replicas }}</td>
+          <td>{{ dep.readyReplicas }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section *ngIf="selectedPod">
+    <h2>Logs: {{ selectedPod }} <button (click)="closeLogs()">Close</button></h2>
+    <pre class="log-viewer"><span *ngFor="let line of logLines"
+          [class.error-line]="isErrorLine(line)">{{ line }}
+</span></pre>
+  </section>
+</div>
